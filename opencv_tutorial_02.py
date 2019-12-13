@@ -8,15 +8,14 @@ import cv2
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True,
-	help="path to input image")
+ap.add_argument("-i", "--image", required=True, help="path to input image")
 args = vars(ap.parse_args())
 
 # load the input image (whose path was supplied via command line
 # argument) and display the image to our screen
 image = cv2.imread(args["image"])
-# input image starting at x=320,y=60 at ending at x=420,y=160
-roi = image[378:1497, 66:913]
+#           y1:y2     x1:x2
+roi = image[479:741, 104:471]
 resized = imutils.resize(roi, width=500)
 gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
 blurred = cv2.GaussianBlur(gray, (7, 7), 0)  # 7,7 durch ausprobieren gefunden...
@@ -51,22 +50,10 @@ cv2.putText(output, text, (10, 25),  cv2.FONT_HERSHEY_SIMPLEX, 0.7, (240, 0, 159
 cv2.imshow("Contours", output)
 cv2.waitKey(0)
 
-# we apply erosions to reduce the size of foreground objects
-mask = thresh.copy()
-mask = cv2.erode(mask, None, iterations=5)
-cv2.imshow("Eroded", mask)
-cv2.waitKey(0)
-
-# similarly, dilations can increase the size of the ground objects
-mask = thresh.copy()
-mask = cv2.dilate(mask, None, iterations=5)
-cv2.imshow("Dilated", mask)
-cv2.waitKey(0)
-
 # a typical operation we may want to apply is to take our mask and
 # apply a bitwise AND to our input image, keeping only the masked
 # regions
-mask = thresh.copy()
-output = cv2.bitwise_and(image, image, mask=mask)
+mask = resized.copy()
+output = cv2.bitwise_and(resized, resized, mask=mask)
 cv2.imshow("Output", output)
 cv2.waitKey(0)
