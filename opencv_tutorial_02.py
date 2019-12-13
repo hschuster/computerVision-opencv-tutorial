@@ -15,24 +15,18 @@ args = vars(ap.parse_args())
 # load the input image (whose path was supplied via command line
 # argument) and display the image to our screen
 image = cv2.imread(args["image"])
-cv2.imshow("Image", image)
-cv2.waitKey(0)
-
-# convert the image to grayscale
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-cv2.imshow("Gray", gray)
-cv2.waitKey(0)
-
-# applying edge detection we can find the outlines of objects in
-# images
-edged = cv2.Canny(gray, 30, 150)
-cv2.imshow("Edged", edged)
+resized = imutils.resize(image, width=500)
+gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
+blurred = cv2.GaussianBlur(gray, (7, 7), 0)  # 7,7 durch ausprobieren gefunden...
+cv2.imshow("Blurred", blurred)
+edged = cv2.Canny(blurred, 90, 190)  # 90,190 durch ausprobieren gefunden
+cv2.imshow("Edged 30 150", edged)
 cv2.waitKey(0)
 
 # threshold the image by setting all pixel values less than 225
 # to 255 (white; foreground) and all pixel values >= 225 to 255
 # (black; background), thereby segmenting the image
-thresh = cv2.threshold(gray, 225, 255, cv2.THRESH_BINARY_INV)[1]
+thresh = cv2.threshold(gray, 250, 250, cv2.THRESH_BINARY_INV)[1]
 cv2.imshow("Thresh", thresh)
 cv2.waitKey(0)
 
