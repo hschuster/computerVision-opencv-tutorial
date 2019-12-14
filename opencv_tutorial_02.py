@@ -17,6 +17,7 @@ image = cv2.imread(args["image"])
 #           y1:y2     x1:x2
 roi = image[479:741, 104:471]
 resized = imutils.resize(roi, width=500)
+cv2.imshow("Image Resized, Roi", resized)
 gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
 blurred = cv2.GaussianBlur(gray, (7, 7), 0)  # 7,7 durch ausprobieren gefunden...
 cv2.imshow("Blurred", blurred)
